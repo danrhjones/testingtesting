@@ -53,7 +53,7 @@ jobs:
       # - run: apk add --update curl
       - run:
           name: smoke test
-          command:  return 1
+          command:  exit 1
 
       - destroy_environment
        
