@@ -1,12 +1,7 @@
 version: 2.1
-# Use a package of configuration called an orb.
 orbs:
-  # Choose either one of the orbs below
-  # welcome: circleci/welcome-orb@0.4.1
   aws-cli: circleci/aws-cli@2.0.3
-# Define the jobs we want to run for this project
 commands:
-   # Exercise - Rollback
    destroy_environment:
 
     steps:
@@ -14,13 +9,9 @@ commands:
           name: Destroy environment
           when: on_fail
           command: |
-            # curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
-            # unzip awscliv2.zip
-            # sudo ./aws/install
-            echo ${CIRCLE_WORKFLOW_ID:0:7}
             aws cloudformation delete-stack --stack-name myStack-${CIRCLE_WORKFLOW_ID:0:5}
-jobs:
 
+jobs:
   create_infrastructure: 
       docker:
         - image: amazon/aws-cli
@@ -49,19 +40,17 @@ jobs:
         - run:
             name: Install dependencies
             command: |
-              # install the dependencies needed for your playbook
               apk add --update ansible 
         - run:
             name: Configure server
             command: |
               ansible-playbook -i inventory.txt main.yml
 
-  # Exercise: Smoke Testing
   smoke_test:
     docker:
         - image: amazon/aws-cli
     steps:
-      - run: apk add --update curl
+      # - run: apk add --update curl
       - run:
           name: smoke test
           command:  return 1
